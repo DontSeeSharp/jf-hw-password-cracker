@@ -1,7 +1,19 @@
-Java Fundamentals - Concurrency API Homework
+Java Fundamentals - Concurrency API
 ===========
 
 Description
+----------
+
+This is an old homework dealing with hash collisions and threading with Evosuite Automatic Test Generation Suite added for TU Delft course on Software Testing & Reverse Engineering.
+
+Running Evosuite
+----------
+
+Maven plugin is added, all you have to do is run:  
+* `mvn -DmemoryInMB=2000 -Dcores=2 evosuite:generate evosuite:export  test`  
+* After that you should find tests under `test/org/zeroturnaround/jf`
+
+Original Assignment Description
 ----------
 
 Imagine I own a web-store. 
@@ -22,7 +34,7 @@ To score the maximum points:
 * Follow all requirements below
 * Make the single test pass, it verifies if you indeed found hash collisions
 
-Requirements
+Original Requirements for This Program
 ----------
 
 1. Use a fixed nr of producer threads: 2 to be precise
@@ -41,15 +53,3 @@ Requirements
 14. Only store the very first valid password guess: if another consumer finds another valid hash, discard it
 15. Make an efficient program, at least make sure your implementation is faster than a single-threaded implementation
 16. Read up yourself on how to properly do consumer-producer design, and handle clean shutdowns, if needed. You are all University students, and do not need handholding for every single detail. "It was not covered in the lecture" is **not** a valid excuse
-
-Lecture Code
-------------
-
-In the package `org.zeroturnaround.jf.lecture8` all code examples shown in class can be found. 
-A lot (most?) of this code originates from the excellent read _Java Concurrency in Practice_ by _Brian Goetz_, read this book. 
-
-Submitting your assignment
---------------------------
-
-1. Run `./mvnw clean deploy`
-2. Send your solution to *jf@zeroturnaround.com*
