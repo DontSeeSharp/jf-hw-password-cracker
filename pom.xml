@@ -12,9 +12,16 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	  <evosuiteVersion>1.0.6</evosuiteVersion>
   </properties>
 
   <dependencies>
+	  <dependency>
+		  <groupId>org.evosuite</groupId>
+		  <artifactId>evosuite-standalone-runtime</artifactId>
+		  <version>${evosuiteVersion}</version>
+		  <scope>test</scope>
+	  </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
@@ -62,34 +69,15 @@
     <finalName>${project.name}</finalName>
 
     <plugins>
-      <!-- Create a proper runnable JAR -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>org.zeroturnaround.jf.Main</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-
-      <!-- This plugin will package all dependencies to the final runtime -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+		<plugin>
+			<groupId>org.evosuite.plugins</groupId>
+			<artifactId>evosuite-maven-plugin</artifactId>
+			<version>${evosuiteVersion}</version>
+			<executions><execution>
+				<goals> <goal> prepare </goal> </goals>
+				<phase> process-test-classes </phase>
+			</execution></executions>
+		</plugin>
 
       <!-- Set Java language level to 8 -->
       <plugin>
@@ -102,57 +90,7 @@
         </configuration>
       </plugin>
 
-      <!-- Custom deploy phase to hand in homework -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
-
-        <executions>
-          <execution>
-            <id>package homework ZIP</id>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <phase>deploy</phase>
-            <configuration>
-              <target>
-                <input message="Your full name (e.g. John Smith): " addproperty="full-name"/>
-                <input message="Your Student Book Number (matrikli number, e.g. ABCD012345): " addproperty="sbn"/>
-                <input message="Comment: " addproperty="comment"/>
-                <echo file="homework.properties" append="false">
-                  full-name=${full-name}${line.separator}sbn=${sbn}${line.separator}homework-number=${project.name}${line.separator}comment=${comment}
-                </echo>
-                <basename property="build-directory-name" file="${project.build.directory}"/>
-                <zip destfile="${project.build.directory}/${project.name}-${sbn}.zip">
-                  <zipfileset dir="." prefix="${project.name}"
-                              excludes="${build-directory-name}/**,dependency-reduced-pom.xml,.mvn/**,mvnw,mvnw.cmd,.settings/**,.idea/**,*.iml,*.ipr,*.iws"/>
-                </zip>
-                <delete file="homework.properties"/>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.9.7</version>
-          </dependency>
-        </dependencies>
-      </plugin>
     </plugins>
 
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <configuration>
-            <skip>true</skip>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 </project>

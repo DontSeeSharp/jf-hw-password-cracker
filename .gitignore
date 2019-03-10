@@ -5,3 +5,7 @@
 # IntelliJ
 /.idea
 /*.iml
+
+# Evosuite
+.evosuite
+*.tmp
